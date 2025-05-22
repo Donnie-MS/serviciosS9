@@ -3,7 +3,24 @@ import serviciosProfesionales.*
 class EmpresaDeServicios {
     var property profesionales = #{}
     var property honorarios//de referencia
-
+    var property clientes = #{}
+    method darServicio(unSolicitante) {
+        var profesional = profesionales.find({profesional => unSolicitante.puedeSerAtendido(profesional)})
+        profesional.cobrar(profesional.honorarios())
+        self.agregarCliente(unSolicitante)
+    }
+    method eliminarCliente(unCliente) {
+        clientes.remove(unCliente)
+    }
+    method agregarCliente(unCliente) {
+        clientes.add(unCliente)
+    }
+    method cantClientes() {
+        return clientes.size()
+    }
+    method esCliente(unSolicitante) {
+        return clientes.contains(unSolicitante)
+    }
     method cantProfesionalesContratados(unaUniversidad) {
         return self.profesionalesContratados(unaUniversidad).size()
     }
@@ -56,9 +73,9 @@ class Club {
     
 }
 class Persona {
-    var property provincia
+    var property provincia = #{}
     method puedeSerAtendido(unProfesional) {
-        return unProfesional.puedeTrabajar(provincia)
+        return not (unProfesional.puedeTrabajar().intersection(provincia).isEmpty())
     }
 }
 class Institucion {//probar
@@ -67,12 +84,3 @@ class Institucion {//probar
         return universidades.any({uni => uni == unProfesional.universidad()})
     }
 }
-
-
-/*
-hacer test 
-los profesionales libres se guardan todo lo que cobran. Debe mantenerse el total recaudado por cada uno.
-Un profesional libre le puede pasar una cantidad X de dinero a otro: se resta X del total recaudado, y el otro cobra X. P.ej. si ruben tiene 10000 de total recaudado, nora tiene 12000, y hacemos
-nora.pasarDinero(ruben,4000)
-entonces nora pasa a tener 8000, y ruben 14000 (porque cobró 4000).
-*/

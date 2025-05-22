@@ -3,17 +3,19 @@ import serviciosProfesionales.*
 
 describe "Comportamiento Empresa" {
 
-    const sanMartin = new Universidad(provincia="Buenos Aires", honorarios = 3500)
-    const rosario = new Universidad(provincia="Santa fe", honorarios = 2800)
-    const corrientes = new Universidad(provincia="Corrientes", honorarios = 4200)
-    const hurlingham = new Universidad(provincia="Buenos Aires", honorarios = 8800)
+    const sanMartin = new Universidad(provincia=#{"Buenos Aires"}, honorarios = 3500)
+    const rosario = new Universidad(provincia=#{"Santa Fe"}, honorarios = 2800)
+    const corrientes = new Universidad(provincia=#{"Corrientes"}, honorarios = 4200)
+    const hurlingham = new Universidad(provincia=#{"Buenos Aires"}, honorarios = 8800)
 
     const juana = new ProfesionalVinculado(universidad = rosario)
     const melina = new ProfesionalAsociado(universidad = corrientes)
     const rocio = new ProfesionalLibre(universidad = hurlingham, honorarios= 5000, puedeTrabajar = #{"Santa Fe", "Cordoba", "Buenos Aires"})
-    const luciana = new ProfesionalLibre(universidad = rosario, honorarios = 3200, puedeTrabajar = #{"Santa fe", "Entre rios"})
+    const luciana = new ProfesionalLibre(universidad = rosario, honorarios = 3200, puedeTrabajar = #{"Santa Fe", "Entre rios"})
     
     const empresa = new EmpresaDeServicios(honorarios= 3500)
+
+    const pepito = new Persona(provincia= #{"Santa Fe"})
 
     method initialize() {
         empresa.contratar(juana)
@@ -50,8 +52,31 @@ describe "Comportamiento Empresa" {
         luciana.agregarProvincia("Misiones")
         assert.notThat(empresa.esDeGenteAcotada())
     }
+    test "los profesionales libres se guardan todo lo que cobran" {
+        rocio.cobrar(2000)
+        assert.equals(2000, rocio.dinero())
+    }
+    test "Un profesional libre le puede pasar una cantidad X de dinero a otro" {
+        rocio.cobrar(1000)
+        rocio.pasarDinero(luciana, 500)
+        assert.equals(500, luciana.dinero())
+    }
+    test "Profesional vinculado (juana) puede trabajar solamente en Santa Fe" {
+        assert.equals(#{"Santa Fe"}, juana.puedeTrabajar())
+    }
+    test "Profesional asociado (melina) puede trabajar en Entre Rios, Santa Fe, Corrientes" {
+        assert.equals(#{"Entre Rios", "Santa Fe", "Corrientes"}, melina.puedeTrabajar())
+    }
+    test "Profesional libre (luciana) puede trabajar en Santa fe, Entre rios" {
+        assert.equals(#{"Santa Fe", "Entre rios"}, luciana.puedeTrabajar())
+    }
+    test "pepito puede ser atendido por juana" {
+        assert.that(pepito.puedeSerAtendido(juana))
+    }
+    test "Se puede dar servicio una persona(pepito)" {
+        empresa.darServicio(pepito)
+        assert.equals(0, juana.dinero())
+        assert.equals(1400, juana.universidad().donaciones())
+        assert.that(empresa.esCliente(pepito))
+    }
 }
-/*, debe tener
-Esta empresa es de gente acotada. Pero si le agregamos a Luciana dos provincias más (p.ej. Corrientes y Misiones)
-
-*/

@@ -1,6 +1,6 @@
 import Empresa.*
 class Universidad {
-    const property provincia
+    const property provincia = #{}
     var property honorarios
     var property donaciones = 0
     method recibirDonacion(monto) {
@@ -15,8 +15,9 @@ object asociacionProfesionalesDelLitoral {
 }
 class ProfesionalVinculado {
     const property universidad
-    method puedeTrabajar() = #{universidad.provincia()}
+    method puedeTrabajar() = universidad.provincia()
     method honorarios() = universidad.honorarios()
+    var property dinero = 0
     method cobrar(monto) {
         self.donarA(universidad, monto / 2)
     }
@@ -29,6 +30,7 @@ class ProfesionalAsociado {
     const property universidad
     method puedeTrabajar() = #{"Entre Rios", "Santa Fe", "Corrientes"}
     method honorarios() = 3000
+    var property dinero = 0
     method cobrar(monto) {
         asociacionProfesionalesDelLitoral.recibirRecaudacion(monto)
     }
