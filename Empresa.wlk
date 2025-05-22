@@ -68,3 +68,11 @@ class Institucion {//probar
     }
 }
 
+
+/*
+hacer test 
+los profesionales libres se guardan todo lo que cobran. Debe mantenerse el total recaudado por cada uno.
+Un profesional libre le puede pasar una cantidad X de dinero a otro: se resta X del total recaudado, y el otro cobra X. P.ej. si ruben tiene 10000 de total recaudado, nora tiene 12000, y hacemos
+nora.pasarDinero(ruben,4000)
+entonces nora pasa a tener 8000, y ruben 14000 (porque cobró 4000).
+*/
