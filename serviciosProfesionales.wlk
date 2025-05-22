@@ -10,7 +10,7 @@ class ProfesionalVinculado {
     method honorarios() = universidad.honorarios()  
 }
 
-class ProfesionalAsociados {
+class ProfesionalAsociado {
     const property universidad
     method puedeTrabajar() = #{"Entre Rios", "Santa Fe", "Corrientes"}
     method honorarios() = 3000
@@ -19,31 +19,11 @@ class ProfesionalAsociados {
 
 class ProfesionalLibre {
     const property universidad
-    var property puedeTrabajar
+    var property puedeTrabajar = #{}
     var property honorarios
+    method agregarProvincia(unaProvincia) {
+        puedeTrabajar.add(unaProvincia)
+    }
 }
 
-class EmpresaDeServicio {
-    var property profesionales
-    var property honorarios//de referencia
 
-    method cantProfesionalesContratados(unaUniversidad) {
-        return self.profesionalesContratados(unaUniversidad).size()
-    }
-    method profesionalesContratados(unaUniversidad) {
-        return profesionales.filter({profesional => profesional.universidad() == Universidad})
-    }
-    method profesionalesCaros() {
-        return profesionales.filter({profesional => profesional.honorarios() > honorarios})
-    }
-    method universidadesFormadoras() {//TESTEAR
-        return profesionales.map({profesional => profesional.universidad()})
-    }
-    method profesionalMasBarato() {
-        return profesionales.min({profesional => profesional.honorarios()})
-    }
-    method genteAcotada() {
-        return profesionales.all({profesional => profesional.puedeTrabajar().size() <= 3})
-    }
-
-}
