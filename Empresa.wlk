@@ -1,6 +1,5 @@
 import serviciosProfesionales.*
 
-
 class EmpresaDeServicios {
     var property profesionales = #{}
     var property honorarios//de referencia
@@ -10,6 +9,9 @@ class EmpresaDeServicios {
     }
     method cantProfesionalesContratados() {
         return profesionales.size()
+    }
+    method puedeSatisfacer(unSolicitante) {
+        return profesionales.any({profesional => unSolicitante.puedeSerAtendido(profesional)})
     }
     method contratar(unProfesional) {
         profesionales.add(unProfesional)
@@ -46,3 +48,23 @@ class EmpresaDeServicios {
     }
 
 }
+class Club {
+    var property provincias = #{}
+    method puedeSerAtendido(unProfesional) {
+        return not (provincias.intersection(unProfesional.provincia()).isEmpty())
+    }
+    
+}
+class Persona {
+    var property provincia
+    method puedeSerAtendido(unProfesional) {
+        return unProfesional.puedeTrabajar(provincia)
+    }
+}
+class Institucion {//probar
+    const property universidades = #{}
+    method puedeSerAtendido(unProfesional) {
+        return universidades.any({uni => uni == unProfesional.universidad()})
+    }
+}
+
